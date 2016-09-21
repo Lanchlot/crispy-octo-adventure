@@ -1,0 +1,62 @@
+package threadTest;
+import java.awt.*;
+import javax.swing.*;
+import java.util.Random;
+
+public class SleepThreadTest extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Thread t;    
+	//创建颜色数组
+	private static Color[] color = {Color.BLACK,Color.BLUE,Color.CYAN,Color.DARK_GRAY,Color.GREEN,
+									Color.ORANGE,Color.PINK,Color.RED,Color.YELLOW,Color.WHITE};
+	private static final Random random = new Random();   //创建随机对象
+	
+	//随机获取颜色对象
+	public static Color getColor(){
+		int i = random.nextInt(color.length);
+		return color[i];
+	}
+	
+	//构造方法
+	public SleepThreadTest(){
+		t = new Thread(new Runnable(){
+			int x = 100;
+			int y = 100;
+			public void run(){
+				while(true){
+					try{
+						Thread.sleep(50);
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+					Graphics graphics = getGraphics();  //不能放在外面
+					graphics.setColor(getColor());     //设置随机产生的颜色
+					graphics.drawLine(x, y, x+200, y);   //画直线
+					y+=5;
+					if(y>300){
+						y = 100;
+					}
+				}
+			}
+		});
+		t.start();     //启动线程
+	}
+	
+	
+	public static void main(String[] args) {
+		init(new SleepThreadTest(),500,400);
+
+	}
+	
+	//初始化方法
+	public static void init(JFrame frame,int width,int heigh){ 
+		frame.setSize(width,heigh);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+	}
+
+}
